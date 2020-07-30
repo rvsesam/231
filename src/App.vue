@@ -1,18 +1,18 @@
 <template>
   <div
     id="app"
-      v-bind:class="[isLarge ? 'lg' : 'sm']"
+      v-bind:class="[sidebar_collapsed ? 'small_sidebar' : 'large_sidbar']"
       >
       <div
         id="header_left"
-        @click="toggleClass()"
+        @click="toggleSidebarWidth()"
         >
         Logo
       </div>
       <div
         id="header_right"
         v-bind:style="{ background: activeColor }"
-        @click="toggleColor()"
+        @click="toggleHeaderColor()"
         >
           <router-link to="/">Home </router-link> |
           <router-link to="/about"> About </router-link>
@@ -39,15 +39,15 @@
 export default {
   data () {
     return {
-      isLarge: true,
+      sidebar_collapsed: false,
       activeColor: 'red'
     }
   },
   methods: {
-    toggleClass: function () {
-      this.isLarge = !this.isLarge
+    toggleSidebarWidth: function () {
+      this.sidebar_collapsed = !this.sidebar_collapsed
     },
-    toggleColor: function () {
+    toggleHeaderColor: function () {
       this.activeColor === 'red' ? this.activeColor = 'green' : this.activeColor = 'red'
     }
   }
@@ -64,59 +64,44 @@ export default {
     display grid
     grid-template-columns 50px 100px auto 150px
     grid-template-rows 3em auto 3em
+    grid-template-areas:
+      'logo logo menu menu'
+      'sideleft sideleft article sideright'
+      'sideleft sideleft footer footer'
     min-height 100vh
-  .sm
-    #header_left, #aside_left
-      grid-column 1 / 2
-    #header_right, footer
-      grid-column 2 / 5
-    #article
-      grid-column 2 / 4
-    #footer
-      grid-column 2 / 5
   #header_left
     background-color #aaaaaa
-    grid-column 1 / 3
+    grid-area: logo
     transition .5s ease
   #header_right
     //background-color #cccaca
-    grid-column 3 / 5
-    .sm
-      grid-column 2 / 5
+    grid-area: menu
   #aside_left
     background-color $green
-    grid-column 1 / 3
-    grid-row 2 / 4;
+    grid-area: sideleft
     transition .5s ease
-    .sm
-      grid-column 1 / 2
   #article
-    transition 1s ease
+    grid-area: article
     background-color $violet
-    grid-column 3 / 4
     transition .5s ease
-    .sm
-      grid-column 2 / 4
   #aside_right
     background-color $green
+    grid-area: sideright
   #footer
+    grid-area: footer
     background-color #aaaaaa
-    grid-column 3 / 5
   #header_left, #header_right, #aside_left, #aside_right, #article, #footer
     display flex
     align-items center
     justify-content center
-    margin-bottom 0
 
   @media all and (max-width 700px)
-    .grid
-      display grid
-      grid-template-columns $left_sidebar_width auto 150px
-      grid-template-rows 3em 3em 3em auto 3em 3em
-      min-height 100vh
-    #aside_left, #aside_right, #header_left, #header_right, #article, #footer
-      grid-column 1 / 5
-    #aside_left
-      grid-row 2 / 3
+    grid-template-areas:
+      'logo'
+      'menu'
+      'sideleft'
+      'article'
+      'sideright'
+      'footer'
 
 </style>
