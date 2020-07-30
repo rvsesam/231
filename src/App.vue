@@ -9,7 +9,11 @@
         >
         Logo
       </div>
-      <div id="header_right">
+      <div
+        id="header_right"
+        v-bind:style="{ background: activeColor }"
+        @click="toggleColor()"
+        >
           <router-link to="/">Home </router-link> |
           <router-link to="/about"> About </router-link>
       </div>
@@ -35,12 +39,16 @@
 export default {
   data () {
     return {
-      isLarge: true
+      isLarge: true,
+      activeColor: 'red'
     }
   },
   methods: {
     toggleClass: function () {
       this.isLarge = !this.isLarge
+    },
+    toggleColor: function () {
+      this.activeColor === 'red' ? this.activeColor = 'green' : this.activeColor = 'red'
     }
   }
 }
@@ -71,7 +79,7 @@ export default {
     grid-column 1 / 3
     transition .5s ease
   #header_right
-    background-color #cccaca
+    //background-color #cccaca
     grid-column 3 / 5
     .sm
       grid-column 2 / 5
