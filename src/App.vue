@@ -7,7 +7,7 @@
 
       <div id="controls">
         <div>
-          <h4>Sidebar width <em>&mdash; try it!</em> <label for="side-size">{{ sideSize }}</label></h4>
+          <h4>Sidebar width <em>&mdash; try it!</em> <label for="side-size">{{ this.sideSize }}</label></h4>
           <input type="range" id="side-size" min="100" max="400" step="5" v-model="sideSize" v-on:change="changeSideSize">
         </div>
         <div>Sidebar color: <input type="color" v-model="sideColor" v-on:change="changeSideColor"></div>
@@ -35,19 +35,21 @@
 </template>
 
 <script>
+import { sideSize, sideColor } from './config/myconfig'
+
 export default {
   data () {
     return {
       activeColor: 'red',
       sideColor: '#41B883',
-      sideSize: 170
+      sideSize: 180
     }
   },
   computed: {
     cssProps () {
       return {
-        '--sideSize': (this.sideSize) + 'px',
-        '--sideColor': this.sideColor
+        '--sideSize': sideSize + 'px',
+        '--sideColor': sideColor
       }
     }
   },
