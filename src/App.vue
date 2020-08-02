@@ -1,36 +1,34 @@
 <template>
-  <div
-    id="app"
-      v-bind:class="[sidebar_collapsed ? 'small_sidebar' : 'large_sidbar']"
-      >
-      <div
-        id="header_left"
-        @click="toggleSidebarWidth()"
-        >
-        Logo
+  <div id="app">
+      <div id="header">
+        <h1><img src="./assets/logo.png"> Variable sidebar width</h1>
+        <p>A simple example of css grid in action.</p>
       </div>
-      <div
-        id="header_right"
-        v-bind:style="{ background: activeColor }"
-        @click="toggleHeaderColor()"
-        >
-          <router-link to="/">Home </router-link> |
-          <router-link to="/about"> About </router-link>
+
+      <div id="controls">
+        <div>
+          <h4>Sidebar width <em>&mdash; try it!</em> <label for="side-size">{{ sideSize }}</label></h4>
+          <input type="range" id="side-size" min="100" max="400" step="5" v-model="sideSize" v-on:change="changeSideSize">
+        </div>
       </div>
-      <div
-        id="aside_left"
-        class="sidebar_left"
-        >
-        Left Sidebar
-      </div>
-      <div id="article">
-        <router-view/>
-      </div>
-      <div id="aside_right" class="sidebar-right">
-        Right Sidebar
-      </div>
-      <div id="footer">
-        Footer
+      <div id="grid">
+        <div id="logo" >
+          Logo
+        </div>
+        <div
+          id="menu"
+          v-bind:style="{ background: activeColor }"
+          @click="toggleHeaderColor()"
+          >
+            <router-link to="/">Home </router-link> |
+            <router-link to="/about"> About </router-link>
+        </div>
+        <div id="side">
+          Left Sidebar
+        </div>
+        <div id="main">
+          <router-view/>
+        </div>
       </div>
   </div>
 </template>
@@ -39,69 +37,154 @@
 export default {
   data () {
     return {
-      sidebar_collapsed: false,
-      activeColor: 'red'
+      activeColor: 'red',
+      sideSize: 170
     }
   },
   methods: {
-    toggleSidebarWidth: function () {
-      this.sidebar_collapsed = !this.sidebar_collapsed
-    },
     toggleHeaderColor: function () {
       this.activeColor === 'red' ? this.activeColor = 'green' : this.activeColor = 'red'
+    },
+    changeSideSize: function () {
+      document.querySelector('#grid').style.setProperty('--sideSize', this.sideSize + 'px')
     }
   }
 }
 </script>
 
 <style lang="stylus">
-  @import "./assets/stylus/style.styl"
+  @import "./styles/style.styl"
+
+  :root
+    --sideSize: $sideSize
+
+  *
+    margin: 0
+    padding: 0
+    line-height: 1.5em
+
+  body
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+    background-color: #222129
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+    font-size: 14px
+    color: white
+
   #app
+    display grid
+    grid-template-columns auto
+    grid-template-rows 100px 130px auto
+    grid-template-areas 'header' 'controls' 'demo'
+    min-height 100vh
+
+  #grid
     font-family Avenir, Helvetica, Arial, sans-serif
     -webkit-font-smoothing antialiased
     -moz-osx-font-smoothing grayscale
     text-align center
+    grid-area demo
     display grid
-    grid-template-columns 50px 100px auto 150px
-    grid-template-rows 3em auto 3em
-    grid-template-areas:
-      'logo logo menu menu'
-      'sideleft sideleft article sideright'
-      'sideleft sideleft footer footer'
-    min-height 100vh
-  #header_left
+    grid-template-columns var(--sideSize) auto
+    grid-template-rows 3em auto
+    grid-template-areas 'logo menu' 'side main'
+
+    @media all and (max-width 700px)
+      grid-template-columns auto
+      grid-template-rows 50px 50px 50px auto
+      grid-template-areas 'logo' 'menu' 'side' 'main'
+
+  #logo
     background-color #aaaaaa
-    grid-area: logo
+    grid-area logo
     transition .5s ease
-  #header_right
-    //background-color #cccaca
-    grid-area: menu
-  #aside_left
+  #menu
+    grid-area menu
+  #side
     background-color $green
-    grid-area: sideleft
+    grid-area side
     transition .5s ease
-  #article
-    grid-area: article
+  #main
     background-color $violet
+    grid-area main
     transition .5s ease
-  #aside_right
-    background-color $green
-    grid-area: sideright
-  #footer
-    grid-area: footer
-    background-color #aaaaaa
-  #header_left, #header_right, #aside_left, #aside_right, #article, #footer
+  #logo, #menu, #side, #main
     display flex
     align-items center
     justify-content center
 
-  @media all and (max-width 700px)
-    grid-template-areas:
-      'logo'
-      'menu'
-      'sideleft'
-      'article'
-      'sideright'
-      'footer'
+  a
+    color: inherit
+    text-decoration: none
+
+  h1
+    font-size: 25px
+    color: white
+
+  h3
+    font-size: 14px
+    margin-bottom: 5px
+
+  h4
+    font-size: 14px
+    margin-bottom: 10px
+    font-weight: 700
+
+  p
+    margin-bottom: 16px
+    line-height: 1.5em
+
+#header
+  display: flex
+  align-items: center
+  padding: 20px 4%
+  margin-bottom: 20px
+  background: $spotify-black
+  grid-area header
+  @media screen and (max-width:768px)
+    flex-flow: column
+
+  h1, p
+    width: 50%;
+    @media screen and (max-width:768px)
+      width: 100%;
+
+  p
+    text-align: right
+    color: rgba(white, 0.65)
+    @media screen and (max-width:768px)
+      text-align: left !important
+      margin-top: 10px
+      text-indent: 63px
+
+  img
+    width: 48px
+    height: 48px
+    vertical-align: middle
+    margin-right: 10px
+
+#controls
+  margin 3% 2%
+  display -webkit-box
+  grid-area controls
+  display flex
+  div
+    width: 24%
+    padding: 0 2%
+    input[type="range"]
+      width: 100%
+      margin-bottom: 30px
+    label
+      background: $spotify-green
+      color: white
+      padding: 2px 4px
+      border-radius: 2px
+      float: right
+  h4 em
+    font-style: normal
+    font-weight: 400
+    color: rgba(white, 0.4)
+  p
+    color: rgba(white, 0.70)
 
 </style>
