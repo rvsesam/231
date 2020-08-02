@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :style="cssProps">
       <div id="header">
         <h1><img src="./assets/logo.png"> dynamic Grid Demo</h1>
         <p>A simple example of css grid in action.</p>
@@ -43,6 +43,14 @@ export default {
       sideSize: 170
     }
   },
+  computed: {
+    cssProps () {
+      return {
+        '--sideSize': (this.sideSize) + 'px',
+        '--sideColor': this.sideColor
+      }
+    }
+  },
   methods: {
     toggleHeaderColor: function () {
       this.activeColor === 'red' ? this.activeColor = 'green' : this.activeColor = 'red'
@@ -59,11 +67,11 @@ export default {
 
 <style lang="stylus">
   @import "./styles/style.styl"
-
+/*
   :root
     --sideSize: $sideSize
     --sideColor: $sideColor
-
+*/
   *
     margin: 0
     padding: 0
