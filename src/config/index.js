@@ -1,4 +1,5 @@
 export default {
-  sideSize: 280,
-  sideColor: 'green'
+  sideSize: 210,
+  sideColor: '#41DE83',
+  footerHeight: '3em'
 }

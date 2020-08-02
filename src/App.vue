@@ -7,10 +7,11 @@
 
       <div id="controls">
         <div>
-          <h4>Sidebar width <em>&mdash; try it!</em> <label for="side-size">{{ this.sideSize }}</label></h4>
-          <input type="range" id="side-size" min="100" max="400" step="5" v-model="sideSize" v-on:change="changeSideSize">
+          <h4>Sidebar width <em>&mdash; try it!</em> <label class="green" for="side-size">{{ this.sideSize }}</label></h4>
+          <input type="range" id="side-size" min="0" max="400" step="5" v-model="sideSize" v-on:change="changeSideSize">
         </div>
         <div>Sidebar color: <input type="color" v-model="sideColor" v-on:change="changeSideColor"></div>
+        <div><button class="button is-primary" @click="changeFooter">Footer</button></div>
       </div>
       <div id="grid">
         <div id="logo" >
@@ -30,6 +31,8 @@
         <div id="main">
           <router-view/>
         </div>
+        <div id="footer">
+        </div>
       </div>
   </div>
 </template>
@@ -42,14 +45,16 @@ export default {
     return {
       activeColor: 'red',
       sideColor: config.sideColor,
-      sideSize: config.sideSize
+      sideSize: config.sideSize,
+      footerHeight: config.footerHeight
     }
   },
   computed: {
     cssProps () {
       return {
         '--sideSize': this.sideSize + 'px',
-        '--sideColor': this.sideColor
+        '--sideColor': this.sideColor,
+        '--footerHeight': this.footerHeight
       }
     }
   },
@@ -59,9 +64,16 @@ export default {
     },
     changeSideSize: function () {
       document.querySelector('#grid').style.setProperty('--sideSize', this.sideSize + 'px')
+      console.log(this.sideSize)
     },
     changeSideColor: function () {
       document.querySelector('#side').style.setProperty('--sideColor', this.sideColor)
+    },
+    changeFooter: function () {
+      console.log(this.footerHeight)
+      this.footerHeight === '0em' ? this.footerHeight = '3em' : this.footerHeight = '0em'
+      console.log(this.footerHeight)
+      document.querySelector('#footer').style.setProperty('--footerHeight', this.footerHeight)
     }
   }
 }
@@ -69,11 +81,7 @@ export default {
 
 <style lang="stylus">
   @import "./styles/style.styl"
-/*
-  :root
-    --sideSize: $sideSize
-    --sideColor: $sideColor
-*/
+
   *
     margin: 0
     padding: 0
@@ -83,7 +91,7 @@ export default {
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
     background-color: #222129
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif
     font-size: 14px
     color: white
 
@@ -99,16 +107,16 @@ export default {
     -webkit-font-smoothing antialiased
     -moz-osx-font-smoothing grayscale
     text-align center
+    color: white
     grid-area demo
     display grid
     grid-template-columns var(--sideSize) auto
-    grid-template-rows 3em auto
-    grid-template-areas 'logo menu' 'side main'
-
+    grid-template-rows 3em auto var(--footerHeight)
+    grid-template-areas 'logo menu' 'side main' 'side footer'
     @media all and (max-width 700px)
       grid-template-columns auto
       grid-template-rows 50px 50px 50px auto
-      grid-template-areas 'logo' 'menu' 'side' 'main'
+      grid-template-areas 'logo' 'menu' 'side' 'main' 'footer'
 
   #logo
     background-color #aaaaaa
@@ -124,7 +132,10 @@ export default {
     background-color $violet
     grid-area main
     transition .5s ease
-  #logo, #menu, #side, #main
+  #footer
+    grid-area: footer
+    background-color #aaaaaa
+  #logo, #menu, #side, #main, #footer
     display flex
     align-items center
     justify-content center
@@ -149,6 +160,9 @@ export default {
   p
     margin-bottom: 16px
     line-height: 1.5em
+
+  .green
+    background: $spotify-green
 
 #header
   display: flex
@@ -191,7 +205,6 @@ export default {
       width: 100%
       margin-bottom: 30px
     label
-      background: $spotify-green
       color: white
       padding: 2px 4px
       border-radius: 2px
