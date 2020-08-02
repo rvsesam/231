@@ -35,21 +35,21 @@
 </template>
 
 <script>
-import { sideSize, sideColor } from './config/myconfig'
+import config from './config/'
 
 export default {
   data () {
     return {
       activeColor: 'red',
-      sideColor: '#41B883',
-      sideSize: 180
+      sideColor: config.sideColor,
+      sideSize: config.sideSize
     }
   },
   computed: {
     cssProps () {
       return {
-        '--sideSize': sideSize + 'px',
-        '--sideColor': sideColor
+        '--sideSize': this.sideSize + 'px',
+        '--sideColor': this.sideColor
       }
     }
   },
