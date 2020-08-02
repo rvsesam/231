@@ -1,7 +1,7 @@
 <template>
   <div id="app">
       <div id="header">
-        <h1><img src="./assets/logo.png"> Variable sidebar width</h1>
+        <h1><img src="./assets/logo.png"> dynamic Grid Demo</h1>
         <p>A simple example of css grid in action.</p>
       </div>
 
@@ -10,6 +10,7 @@
           <h4>Sidebar width <em>&mdash; try it!</em> <label for="side-size">{{ sideSize }}</label></h4>
           <input type="range" id="side-size" min="100" max="400" step="5" v-model="sideSize" v-on:change="changeSideSize">
         </div>
+        <div>Sidebar color: <input type="color" v-model="sideColor" v-on:change="changeSideColor"></div>
       </div>
       <div id="grid">
         <div id="logo" >
@@ -38,6 +39,7 @@ export default {
   data () {
     return {
       activeColor: 'red',
+      sideColor: '#41B883',
       sideSize: 170
     }
   },
@@ -47,6 +49,9 @@ export default {
     },
     changeSideSize: function () {
       document.querySelector('#grid').style.setProperty('--sideSize', this.sideSize + 'px')
+    },
+    changeSideColor: function () {
+      document.querySelector('#side').style.setProperty('--sideColor', this.sideColor)
     }
   }
 }
@@ -57,6 +62,7 @@ export default {
 
   :root
     --sideSize: $sideSize
+    --sideColor: $sideColor
 
   *
     margin: 0
@@ -101,7 +107,7 @@ export default {
   #menu
     grid-area menu
   #side
-    background-color $green
+    background-color var(--sideColor)
     grid-area side
     transition .5s ease
   #main
